@@ -7,7 +7,7 @@ from mlxtend.frequent_patterns import fpgrowth, association_rules
 # Function to load and preprocess data
 def load_data():
     # Assuming the dataset is structured appropriately for this example
-    data = pd.read_csv('path_to_your_dataset.csv')
+    data = pd.read_csv('data.csv')
     # Convert transactions to a one-hot encoded dataframe
     data = pd.get_dummies(data, columns=['Product'], prefix='', prefix_sep='')
     return data
@@ -30,22 +30,19 @@ def recommend_products(rules, basket):
 def main():
     st.title("E-commerce Product Recommendation System")
 
-    # Sidebar for data uploading
-    data_file = st.sidebar.file_uploader("Upload your transactions CSV", type=['csv'])
-    if data_file is not None:
-        data = load_data(data_file)
-        st.write("Data successfully loaded and preprocessed.")
+    data = load_data()
+    st.write("Data successfully loaded and preprocessed.")
         
-        rules = apply_fp_growth(data)
-        st.write("FP-Growth analysis completed.")
+    rules = apply_fp_growth(data)
+    st.write("FP-Growth analysis completed.")
 
-        # User input for current basket
-        customer_basket = st.text_input("Enter the current basket items separated by comma")
-        if customer_basket:
-            recommendations = recommend_products(rules, customer_basket)
-            st.write("Recommended Products:")
-            for index, row in recommendations.iterrows():
-                st.write(f"{list(row['consequents'])} with confidence {row['confidence']:.2f}")
+    # User input for current basket
+    customer_basket = st.text_input("Enter the current basket items separated by comma")
+    if customer_basket:
+        recommendations = recommend_products(rules, customer_basket)
+        st.write("Recommended Products:")
+        for index, row in recommendations.iterrows():
+            st.write(f"{list(row['consequents'])} with confidence {row['confidence']:.2f}")
 
 if __name__ == '__main__':
     main()
