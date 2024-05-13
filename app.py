@@ -8,17 +8,14 @@ import plotly.express as px
 def load_data(file_path):
     data = pd.read_csv(file_path, encoding='ISO-8859-1')
     data = data.dropna(subset=['InvoiceNo', 'StockCode'])
+    data['Quantity'] = data['Quantity'].apply(lambda x: 1 if x > 0 else 0)
     
     return data
 
 # Prepare data for the FP-growth algorithm
 def prepare_basket(data):
-    # Grouping products by InvoiceNo and CustomerID
     basket = (data.groupby(['InvoiceNo', 'StockCode'])['Quantity']
-              .sum().unstack().reset_index().fillna(0)
-              .drop('InvoiceNo', axis=1))
-    # One-hot encoding
-    basket = (basket > 0).astype(int)
+              .sum().unstack().fillna(0))
     return basket
 
 # Run FP-growth algorithm
@@ -34,6 +31,17 @@ def visualize_rules(rules):
     fig = px.scatter(rules.head(20), x='support', y='confidence', hover_data=['antecedents', 'consequents'], size='lift', color='lift')
     st.plotly_chart(fig, use_container_width=True)
 
+# Function to recommend a product based on the current basket
+def recommend_product(basket, rules):
+    possible_products = set()
+    for items in basket:
+        applicable_rules = rules[rules['antecedents'] == frozenset(items)]
+        for index, rule in applicable_rules.iterrows():
+            possible_products.update(rule['consequents'])
+    if possible_products:
+        return possible_products
+    else:
+        return "No recommendation available"
 
 # Main function to run the Streamlit app
 def main():
@@ -62,12 +70,13 @@ def main():
             st.write(filtered_rules)
 
 
-        user_input = st.text_input("Enter a product or set of products (comma-separated):")
+        product_input = st.text_input("Enter products in the basket (comma-separated):")
         
-        if user_input:
-            input_set = set(user_input.split(','))
-            relevant_rules = rules[rules['antecedents'].apply(lambda x: x == input_set)]
-            st.write(relevant_rules)
+        if product_input:
+            user_basket = set(product_input.split(','))
+            recommendation = recommend_product([user_basket], rules)
+            st.write("Recommended Products:", recommendation)
+
 
 
         if st.button('Download Rules as CSV'):
