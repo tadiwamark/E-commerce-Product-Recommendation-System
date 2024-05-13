@@ -6,11 +6,11 @@ from mlxtend.frequent_patterns import fpgrowth, association_rules
 
 # Function to load and preprocess data
 def load_data():
-    # Assuming the dataset is structured appropriately for this example
-    data = pd.read_csv('data.csv')
+    data = pd.read_csv('data.csv', encoding='ISO-8859-1')  
     # Convert transactions to a one-hot encoded dataframe
     data = pd.get_dummies(data, columns=['Product'], prefix='', prefix_sep='')
     return data
+
 
 # Function to apply FP-Growth and find frequent item sets
 def apply_fp_growth(data):
