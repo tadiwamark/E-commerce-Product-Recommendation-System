@@ -8,14 +8,17 @@ import plotly.express as px
 def load_data(file_path):
     data = pd.read_csv(file_path, encoding='ISO-8859-1')
     data = data.dropna(subset=['InvoiceNo', 'StockCode'])
-    data['Quantity'] = data['Quantity'].apply(lambda x: 1 if x > 0 else 0)
     
     return data
 
 # Prepare data for the FP-growth algorithm
 def prepare_basket(data):
+    # Grouping products by InvoiceNo and CustomerID
     basket = (data.groupby(['InvoiceNo', 'StockCode'])['Quantity']
-              .sum().unstack().fillna(0))
+              .sum().unstack().reset_index().fillna(0)
+              .drop('InvoiceNo', axis=1))
+    # One-hot encoding
+    basket = (basket > 0).astype(int)
     return basket
 
 # Run FP-growth algorithm
