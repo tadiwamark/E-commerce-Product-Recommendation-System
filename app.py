@@ -2,6 +2,7 @@
 import streamlit as st
 import pandas as pd
 from mlxtend.frequent_patterns import fpgrowth, association_rules
+import plotly.express as px
 
 # Function to load and preprocess data
 def load_data(file_path):
@@ -27,6 +28,13 @@ def run_fpgrowth(basket, min_support=0.01, min_confidence=0.1):
     rules = rules.sort_values('confidence', ascending=False)
     return rules
 
+
+
+def visualize_rules(rules):
+    fig = px.scatter(rules.head(20), x='support', y='confidence', hover_data=['antecedents', 'consequents'], size='lift', color='lift')
+    st.plotly_chart(fig, use_container_width=True)
+
+
 # Main function to run the Streamlit app
 def main():
     st.title("E-commerce Product Recommendation System")
@@ -45,6 +53,26 @@ def main():
         
         # Display rules
         st.write(rules.head())
+        
+        product_filter = st.multiselect('Filter rules by product:', options=data['StockCode'].unique())
+        
+        if product_filter:
+            filtered_rules = rules[rules['antecedents'].apply(lambda x: any(item in x for item in product_filter)) |
+                            rules['consequents'].apply(lambda x: any(item in x for item in product_filter))]
+            st.write(filtered_rules)
+
+
+        user_input = st.text_input("Enter a product or set of products (comma-separated):")
+        
+        if user_input:
+            input_set = set(user_input.split(','))
+            relevant_rules = rules[rules['antecedents'].apply(lambda x: x == input_set)]
+            st.write(relevant_rules)
+
+
+
+
+
 
 if __name__ == '__main__':
     main()
