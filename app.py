@@ -7,7 +7,7 @@ from mlxtend.frequent_patterns import fpgrowth, association_rules
 # Function to load and preprocess data
 def load_data(file_path):
     # Load the transaction data
-    data = pd.read_csv(file_path)
+    data = pd.read_csv(file_path, encoding='ISO-8859-1')
     # Assuming the transaction data needs to be transformed for analysis
     # Typically, the data will need to be transformed to a format suitable for market basket analysis:
     # One-hot encoding or similar transformations can be performed here.
