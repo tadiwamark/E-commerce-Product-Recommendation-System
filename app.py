@@ -5,17 +5,19 @@ from mlxtend.frequent_patterns import fpgrowth, association_rules
 
 # Function to load and preprocess data
 def load_data(file_path):
-    # Load the transaction data
     data = pd.read_csv(file_path, encoding='ISO-8859-1')
-    data['GroupPrice'] = data['Quantity'] * data['UnitPrice']
-    data = data.dropna()
-    # Remove gift items
-    data = data[data['StockCode'].str.contains('^[1-9]')]
+    data = data.dropna(subset=['InvoiceNo', 'StockCode'])
+    
     return data
 
 # Prepare data for the FP-growth algorithm
 def prepare_basket(data):
-    basket = data.groupby(['InvoiceNo', 'CustomerID'])['StockCode'].apply(set).reset_index()
+    # Grouping products by InvoiceNo and CustomerID
+    basket = (data.groupby(['InvoiceNo', 'StockCode'])['Quantity']
+              .sum().unstack().reset_index().fillna(0)
+              .drop('InvoiceNo', axis=1))
+    # One-hot encoding
+    basket = (basket > 0).astype(int)
     return basket
 
 # Run FP-growth algorithm
