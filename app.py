@@ -70,6 +70,11 @@ def main():
             st.write(relevant_rules)
 
 
+        if st.button('Download Rules as CSV'):
+            st.download_button('Download', data=rules.to_csv(index=False), file_name='association_rules.csv', mime='text/csv')
+
+
+
 
 
 
