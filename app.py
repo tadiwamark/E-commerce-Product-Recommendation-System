@@ -35,14 +35,20 @@ def visualize_rules(rules):
     st.plotly_chart(fig, use_container_width=True)
 
 # Function to recommend a product based on the current basket
-def recommend_product(basket, rules):
-    possible_products = set()
+def recommend_product(basket, rules, data):
+    recommendations = []
     for items in basket:
         applicable_rules = rules[rules['antecedents'] == frozenset(items)]
-        for index, rule in applicable_rules.iterrows():
-            possible_products.update(rule['consequents'])
-    if possible_products:
-        return possible_products
+        for _, rule in applicable_rules.iterrows():
+            consequents = rule['consequents']
+            for consequent in consequents:
+                item_details = data[data['StockCode'] == consequent]
+                if not item_details.empty:
+                    description = item_details['Description'].values[0]
+                    price = item_details['UnitPrice'].values[0]
+                    recommendations.append((consequent, description, rule['confidence'], price))
+    if recommendations:
+        return recommendations
     else:
         return "No recommendation available"
 
@@ -50,8 +56,8 @@ def recommend_product(basket, rules):
 def main():
     st.title("E-commerce Product Recommendation System")
     
-    uploaded_file = st.file_uploader("Choose a CSV file")
-    if uploaded_file is not None:
+    github_url = 'https://github.com/tadiwamark/E-commerce-Product-Recommendation-System/blob/main/data.csv'
+    if github_url:
         data = load_data(uploaded_file)
         basket = prepare_basket(data)
         st.success("Data successfully loaded and preprocessed.")
@@ -77,8 +83,11 @@ def main():
         
         if product_input:
             user_basket = set(product_input.split(','))
-            recommendation = recommend_product([user_basket], rules)
-            st.write("Recommended Products:", recommendation)
+            recommendation = recommend_product([user_basket], rules, data)
+            st.write("Recommended Products:")
+            for item in recommendation:
+                st.write(f"Product Code: {item[0]}, Description: {item[1]}, Probability: {item[2]:.2f}, Estimated Price: {item[3]*item[2]:.2f}")
+
 
 
 
