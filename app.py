@@ -69,7 +69,7 @@ def main():
         data = load_data()
         
         if st.checkbox('Show raw data'):
-            st.write(data)
+            st.write(data.head(50))
             
         basket = prepare_basket(data)
         st.success("Data successfully loaded and preprocessed.")
