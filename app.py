@@ -5,8 +5,8 @@ from mlxtend.frequent_patterns import fpgrowth, association_rules
 import plotly.express as px
 
 # Function to load and preprocess data
-def load_data(file_path):
-    data = pd.read_csv(file_path, encoding='ISO-8859-1')
+def load_data():
+    data = pd.read_csv('data.csv', encoding='ISO-8859-1')
     data = data.dropna(subset=['InvoiceNo', 'StockCode', 'Description', 'UnitPrice'])
     
     return data
