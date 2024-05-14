@@ -1,5 +1,10 @@
 # E-commerce Product Recommendation System
 
+## Group Members
+Tungamiraishe Mukwena R204452G HAI <br />
+Nyasha Zhou R204449M HAI <br />
+Tadiwanashe Nyaruwata R204445V HAI 
+
 ## Overview
 
 This Streamlit app is designed to provide product recommendations based on historical sales data 
