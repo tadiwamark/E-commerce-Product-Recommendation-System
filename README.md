@@ -16,9 +16,9 @@ to anticipate customer needs and enhance their shopping experience.
 
 ## Features
 
--Interactive Analysis: Adjust parameters like minimum support and confidence to explore different association rules.
--Product Recommendations: Enter a set of products to receive recommendations on what other products could be added to the basket.
--Filtering Options: Filter association rules by specific products to focus on the relationships that matter most to you.
+* Interactive Analysis: Adjust parameters like minimum support and confidence to explore different association rules.
+* Product Recommendations: Enter a set of products to receive recommendations on what other products could be added to the basket.
+* Filtering Options: Filter association rules by specific products to focus on the relationships that matter most to you.
 
 ## Usage
 
