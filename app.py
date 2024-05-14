@@ -71,7 +71,7 @@ def main():
         # Display rules
         st.write(rules.head())
         
-        product_filter = st.multiselect('Filter rules by product:', options=data['StockCode'].unique())
+        product_filter = st.multiselect('Filter rules by product(eg 23172):', options=data['StockCode'].unique())
         
         if product_filter:
             filtered_rules = rules[rules['antecedents'].apply(lambda x: any(item in x for item in product_filter)) |
@@ -79,7 +79,7 @@ def main():
             st.write(filtered_rules)
 
 
-        product_input = st.text_input("Enter products in the basket (comma-separated):")
+        product_input = st.text_input("Enter products in the basket (comma-separated)(eg 23172:")
         
         if product_input:
             user_basket = set(product_input.split(','))
