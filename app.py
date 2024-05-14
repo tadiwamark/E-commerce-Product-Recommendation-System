@@ -56,9 +56,9 @@ def recommend_product(basket, rules, data):
 def main():
     st.title("E-commerce Product Recommendation System")
     
-    github_url = 'https://github.com/tadiwamark/E-commerce-Product-Recommendation-System/blob/main/data.csv'
+    github_url = True
     if github_url:
-        data = load_data(github_url )
+        data = load_data()
         basket = prepare_basket(data)
         st.success("Data successfully loaded and preprocessed.")
         
