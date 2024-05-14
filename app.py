@@ -1,3 +1,11 @@
+"""
+Group Members
+
+Tungamiraishe Mukwena R204452G HAI
+Nyasha Zhou R204449M HAI
+Tadiwanashe Nyaruwata R204445V HAI
+"""
+
 # Import necessary libraries
 import streamlit as st
 import pandas as pd
@@ -59,6 +67,10 @@ def main():
     github_url = True
     if github_url:
         data = load_data()
+        
+        if st.checkbox('Show raw data'):
+            st.write(data)
+            
         basket = prepare_basket(data)
         st.success("Data successfully loaded and preprocessed.")
         
