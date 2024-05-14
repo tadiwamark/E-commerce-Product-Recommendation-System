@@ -6,8 +6,8 @@ import plotly.express as px
 
 # Function to load and preprocess data
 def load_data(file_path):
-    data = pd.read_csv(file_path, encoding='ISO-8859-1')
-    data = data.dropna(subset=['InvoiceNo', 'StockCode'])
+    data = pd.read_csv(github_url, encoding='ISO-8859-1')
+    data = data.dropna(subset=['InvoiceNo', 'StockCode', 'Description', 'UnitPrice'])
     
     return data
 
