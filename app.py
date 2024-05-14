@@ -67,12 +67,14 @@ def main():
     github_url = True
     if github_url:
         data = load_data()
-        
-        if st.checkbox('Show raw data'):
-            st.write(data.head(50))
-            
         basket = prepare_basket(data)
+
         st.success("Data successfully loaded and preprocessed.")
+        
+        if st.checkbox('Show raw data(wait for data to load first)'):
+            st.write(data.head(50))
+
+        
         
         min_support = st.slider("Minimum support", 0.01, 0.1, 0.01)
         min_confidence = st.slider("Minimum confidence", 0.1, 1.0, 0.1)
