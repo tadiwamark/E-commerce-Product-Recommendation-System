@@ -58,7 +58,7 @@ def main():
     
     github_url = 'https://github.com/tadiwamark/E-commerce-Product-Recommendation-System/blob/main/data.csv'
     if github_url:
-        data = load_data(uploaded_file)
+        data = load_data(github_url )
         basket = prepare_basket(data)
         st.success("Data successfully loaded and preprocessed.")
         
